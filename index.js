@@ -1,6 +1,12 @@
 var $ = require('cheerio');
 var request = require('request');
-var knwl = require('knwl.js');
+var Knwl = require("./lib/knwl.js/knwl.js");
+//return;
+var knwlInstance = new Knwl('english');
+knwlInstance.register('places', require('./lib/knwl.js/default_plugins/places'));
+//console.log(knwlInstance);
+//return;
+
 
 function gotHTML(err, resp, html) {
     if (err) return console.error(err);
@@ -13,7 +19,11 @@ function gotHTML(err, resp, html) {
     //     imageURLs.push(domain + href)
     // })
 
-    console.log(html);
+    //console.log(html);
+    html = html.replace(/<[^>]*>/g, ' ');
+    knwlInstance.init(html);
+    var places = knwlInstance.get('places');
+    console.log(places);
 }
 
 var domain = 'http://en.wikipedia.org/wiki/Biggs,_California';
